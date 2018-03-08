@@ -1,31 +1,31 @@
 #!/bin/bash
 clear
 function fail {
-    echo "$(tput setaf 1)$*$(tput sgr0)"
-    echo -e "\nPlease check https://github.com/RayzrDev/SharpBot/blob/master/FAQ.md before asking for help.\n"
-    exit 1
+	echo "$(tput setaf 1)$*$(tput sgr0)"
+	echo -e "\nPlease check https://github.com/RayzrDev/SharpBot/blob/master/FAQ.md before asking for help.\n"
+	exit 1
 }
 
 function say {
-    echo -e "\n$(tput setaf 2)> $(tput sgr0)$*\n"
+	echo -e "\n$(tput setaf 2)> $(tput sgr0)$*\n"
 }
 
 function detect_os {
 	if [[ "$OSTYPE" == "linux"* ]]; then
-        	os='GNU/Linux'
+		os='GNU/Linux'
 	elif [[ "$OSTYPE" == "darwin"* ]]; then # macOS (Mac OS X) identifies as darwin
-        	os='macOS'
+		os='macOS'
 	elif [[ "$OSTYPE" == "cygwin" ]]; then # Having Cygwin installed does not confirm that apt or anything else that is required is present
-        	fail "Due to the possibility of certain utilites not being present, install script failing out. Please see http://github.com/RayzrDev/SharpBot for help."
+		fail "Due to the possibility of certain utilites not being present, install script failing out. Please see http://github.com/RayzrDev/SharpBot for help."
 	elif [[ "$OSTYPE" == "msys" ]]; then # Having MinG installed does not confirm that apt or anything else that is required is present
-        	fail "Due to the possibility of certain utilites not being present, install script failing out. Please see http://github.com/RayzrDev/SharpBot for help."
+		fail "Due to the possibility of certain utilites not being present, install script failing out. Please see http://github.com/RayzrDev/SharpBot for help."
 	elif [[ "$OSTYPE" == "win32" ]]; then # This script ain't compatiable with Windows, always fail out
-        	fail "This install script is for Linux and macOS, please use install.bat."
+		fail "This install script is for Linux and macOS, please use install.bat."
 	elif [[ "$OSTYPE" == "freebsd"* ]]; then
-        	# os='freebsd'
+		# os='freebsd'
 		fail "Automated install of Yarn on FreeBSD is not feasible at the moment, check back in a bit for updates."
 	else
-        	fail "OS not compatiable or not detected. Please see http://github.com/RayzrDev/SharpBot for help."
+		fail "OS not compatiable or not detected. Please see http://github.com/RayzrDev/SharpBot for help."
 	fi
 }
 
@@ -40,7 +40,7 @@ function install_deps {
 		sudo apt-get install git -y || fail "Failed to install Git."
 		say "Git installed!"
 		say "Installing Node.JS!"
-		curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+		curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 		sudo apt-get install -y nodejs || fail "Failed to install Node.JS."
 		say "Node.JS installed!"
 		say "Installing Yarn!"
@@ -99,15 +99,15 @@ say "Your OS was detected as: " $os
 say "Checking dependencies... "
 
 for dep in node yarn git; do 
-    if [[ ! "$(command -v $dep)" ]]; then
-        say "Dependencies are not installed or not detected!"
-	read -r -p "Would you like to install the dependencies now? " choice
-	case $choice in
-		[Yy]* ) install_deps; break;;
-		[Nn]* ) fail "Dependencies not satisfied! Install failed!";;
-		* ) fail "Not a valid answer! Install failed!";;
-	esac
-    fi
+	if [[ ! "$(command -v $dep)" ]]; then
+		say "Dependencies are not installed or not detected!"
+		read -r -p "Would you like to install the dependencies now? " choice
+		case $choice in
+			[Yy]* ) install_deps; break;;
+			[Nn]* ) fail "Dependencies not satisfied! Install failed!";;
+			* ) fail "Not a valid answer! Install failed!";;
+		esac
+	fi
 done
 
 say "Downloading bot..."
